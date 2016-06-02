@@ -3,11 +3,14 @@ package Viewer;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -24,6 +27,7 @@ public class ViewerGUI extends JFrame
 {
     public static final int HEIGHT = 300;
     public static final int WIDTH =  600;  
+    public static final String FILE_NAME = "Reservations.dat";
     /**
      * Description: main constructor - set forms to visible, centers it and
      * makes the default close button exit the program.
@@ -31,7 +35,7 @@ public class ViewerGUI extends JFrame
      */
     public static void main(String[] args) 
     {
-        JFrame frame = new ViewerGUI();
+        frame = new ViewerGUI();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -44,6 +48,7 @@ public class ViewerGUI extends JFrame
         ("hotel.png")));
         setTitle("Reservation Viewer");
         setFileMenu();
+        loadBinary();
     }
     /**
      * Description: This method setWestPanel will layout the west side
@@ -63,7 +68,8 @@ public class ViewerGUI extends JFrame
     }
     /**
      * Description: This method will create the File Menu for the user
-     * to select the dictionary file if it is not already loaded.
+     * to select alternative database files if they want to load/reload
+     * the binary database file.
      */
     public void setFileMenu()
     {
@@ -71,13 +77,45 @@ public class ViewerGUI extends JFrame
         helpItem = new JMenuItem("Help");
         aboutItem = new JMenuItem("About");
         quitItem  = new JMenuItem("Quit");
+        openItem = new JMenuItem("Open");
         fileMenu = new JMenu("File");
+        fileMenu.add(openItem);       
         fileMenu.add(helpItem);
         fileMenu.add(aboutItem);
         fileMenu.add(quitItem);
         menuSelector.add(fileMenu);
         quitItem.addActionListener(listener);
+        openItem.addActionListener(listener);
         setJMenuBar(menuSelector);
+    }
+    /**
+     * Description: This will load the binary database file if it is present
+     * if not present it will display an error to the user.
+     */
+    public void loadBinary()
+    {
+        chooseFile = new JFileChooser();
+        binaryFile = new File(FILE_NAME);
+        chooseFile.setCurrentDirectory
+            (binaryFile.getAbsoluteFile().getParentFile());
+        if(binaryFile.canRead() && binaryFile.exists())
+        {
+            
+        }
+        else
+        {
+           JOptionPane.showMessageDialog(frame, "Error: Loading " + FILE_NAME
+           + "\n" + " Please select the database file. ");
+           int result = chooseFile.showOpenDialog(openItem);
+            if(result == JFileChooser.APPROVE_OPTION)
+            {
+                binaryFile = chooseFile.getSelectedFile();
+                if(binaryFile.canRead() && binaryFile.exists())
+                {
+                    System.out.println("File is read");
+                }
+            }
+        }
     }
     ActionListener listener = new ActionListener() 
     {
@@ -94,6 +132,18 @@ public class ViewerGUI extends JFrame
         {
             System.exit(0);
         }
+        if(event.getSource() == openItem)
+        {
+            int result = chooseFile.showOpenDialog(openItem);
+            if(result == JFileChooser.APPROVE_OPTION)
+            {
+                binaryFile = chooseFile.getSelectedFile();
+                if(binaryFile.canRead() && binaryFile.exists())
+                {
+                    System.out.println("File is read");
+                }
+            }
+        }
     }
     };
     JPanel west;
@@ -102,6 +152,9 @@ public class ViewerGUI extends JFrame
     JMenuItem helpItem;
     JMenuItem aboutItem;
     JMenuItem quitItem;
+    JMenuItem openItem;
+    File binaryFile;
     JMenu fileMenu;
-    
+    static JFrame frame;
+    JFileChooser chooseFile;
 }
