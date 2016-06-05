@@ -1,17 +1,32 @@
 package Viewer;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 /**
  * File Name: ViewerGUI.java
@@ -25,9 +40,12 @@ import javax.swing.JPanel;
  */
 public class ViewerGUI extends JFrame
 {
-    public static final int HEIGHT = 300;
+    public static final int HEIGHT = 225;
     public static final int WIDTH =  600;  
     public static final String FILE_NAME = "Reservations.dat";
+    public static final int FONT_SIZE = 20;
+    public static final int COMPONENT_HEIGHTWIDTH = 300;
+    public static final int IMAGE_SIZE = 15;
     /**
      * Description: main constructor - set forms to visible, centers it and
      * makes the default close button exit the program.
@@ -47,8 +65,11 @@ public class ViewerGUI extends JFrame
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource
         ("hotel.png")));
         setTitle("Reservation Viewer");
+        tabPane = new JTabbedPane();
         setFileMenu();
         loadBinary();
+        setTabPanes();
+       
     }
     /**
      * Description: This method setWestPanel will layout the west side
@@ -64,7 +85,60 @@ public class ViewerGUI extends JFrame
      */
     public void setEastPanel()
     {
-        
+
+    }
+    /**
+     * Description: Creates tabs pane for the user to search for the customer
+     * with a JTextField and a JButton so the user can search
+     * and a tab pane where it displays the customer's reservation with the
+     * corresponding one the user selected.
+     */
+    public void setTabPanes()
+    {
+        radioGroup = new ButtonGroup();
+        font = new Font("SansSerif", Font.BOLD, FONT_SIZE);
+        size = new Dimension(COMPONENT_HEIGHTWIDTH,COMPONENT_HEIGHTWIDTH);
+        component = new JPanel();
+        component.setMaximumSize(size);
+        component.setPreferredSize(size);
+        component.setMinimumSize(size);
+        Box horizontal = Box.createHorizontalBox();
+        Box vertical = Box.createVerticalBox();
+        icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage
+        (getClass().getResource(("hotel.png"))));
+        Image image = icon.getImage();
+        Image newImage = 
+                image.getScaledInstance(IMAGE_SIZE, IMAGE_SIZE
+                        , java.awt.Image.SCALE_SMOOTH);
+        icon = new ImageIcon(newImage);
+        wholeButton = new JRadioButton("Search by: Full Name In Whole");
+        startButton = new JRadioButton
+        ("Search by: Letter the Name Starts With");
+        radioGroup.add(wholeButton);
+        radioGroup.add(startButton);
+        custName = new JTextField();
+        custName.setFont(font);
+        custName.setHorizontalAlignment(JTextField.CENTER);
+        buttonPanel = new JPanel();
+        horizontal.add(Box.createHorizontalGlue());
+        searchButton = new JButton("Search");
+        horizontal.add(searchButton);
+        horizontal.add(Box.createHorizontalGlue());
+        vertical.add(Box.createVerticalGlue());
+        vertical.add(custName);
+        vertical.add(Box.createVerticalGlue());
+        vertical.add(wholeButton);
+        vertical.add(startButton);
+        buttonPanel.setBorder(BorderFactory.createTitledBorder
+        ("Search for Customer's Name"));
+        buttonPanel.setLayout(new BoxLayout(buttonPanel , BoxLayout.Y_AXIS));
+        buttonPanel.add(vertical);
+        buttonPanel.add(horizontal);
+        buttonPanel.add(component);
+        tabPane.addTab("Search for Customer", icon, buttonPanel);
+        customersInfo = new JPanel();
+        tabPane.addTab("Customer(s) Reservation(s)", icon, customersInfo);
+        add(tabPane);
     }
     /**
      * Description: This method will create the File Menu for the user
@@ -77,7 +151,7 @@ public class ViewerGUI extends JFrame
         helpItem = new JMenuItem("Help");
         aboutItem = new JMenuItem("About");
         quitItem  = new JMenuItem("Quit");
-        openItem = new JMenuItem("Open");
+        openItem = new JMenuItem("Open Database File");
         fileMenu = new JMenu("File");
         fileMenu.add(openItem);       
         fileMenu.add(helpItem);
@@ -157,4 +231,20 @@ public class ViewerGUI extends JFrame
     JMenu fileMenu;
     static JFrame frame;
     JFileChooser chooseFile;
+    JButton searchButton;
+    JTabbedPane tabPane;
+    JPanel buttonPanel;
+    JTextField custName;
+    JPanel customersInfo;
+    ImageIcon icon;
+    Font font;
+    JComponent component;
+    Dimension size;
+    JRadioButton wholeButton;
+    JRadioButton startButton;
+    JLabel dateLabel;
+    JLabel timeLabel;
+    JTextField dateTextField;
+    JTextField timeTextField;
+    ButtonGroup radioGroup;
 }
