@@ -1,6 +1,5 @@
 package Viewer;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -8,7 +7,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * File Name: ViewerGUI.java
@@ -40,8 +39,8 @@ import javax.swing.JTextField;
  */
 public class ViewerGUI extends JFrame
 {
-    public static final int HEIGHT = 225;
-    public static final int WIDTH =  600;  
+    public static final int HEIGHT = 350;
+    public static final int WIDTH =  800;  
     public static final String FILE_NAME = "Reservations.dat";
     public static final int FONT_SIZE = 20;
     public static final int COMPONENT_HEIGHTWIDTH = 300;
@@ -148,20 +147,57 @@ public class ViewerGUI extends JFrame
     public void setFileMenu()
     {
         menuSelector = new JMenuBar();
-        helpItem = new JMenuItem("Help");
-        aboutItem = new JMenuItem("About");
+        helpMenu = new JMenu("Help");
+        aboutMenu = new JMenu("About");
         quitItem  = new JMenuItem("Quit");
         openItem = new JMenuItem("Open Database File");
         fileMenu = new JMenu("File");
         fileMenu.add(openItem);       
-        fileMenu.add(helpItem);
-        fileMenu.add(aboutItem);
         fileMenu.add(quitItem);
         menuSelector.add(fileMenu);
+        menuSelector.add(aboutMenu);
+        menuSelector.add(helpMenu);
         quitItem.addActionListener(listener);
         openItem.addActionListener(listener);
         setJMenuBar(menuSelector);
+         aboutMenu.addMenuListener(new javax.swing.event.MenuListener() {
+            @Override
+            public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
+            @Override
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
+            }
+            /**
+             * Description: This method will call aboutMenuMenuSelected when
+             * clicked and will bring up the AboutGUI information.
+             * @param evt Menu Listener
+             */
+            @Override
+            public void menuSelected(javax.swing.event.MenuEvent evt) {
+                aboutMenuMenuSelected(evt);
+            }
+        });
+         helpMenu.addMenuListener(new javax.swing.event.MenuListener() {
+            @Override
+            public void menuCanceled(javax.swing.event.MenuEvent e) {
+            }
+            @Override
+            public void menuDeselected(javax.swing.event.MenuEvent e) {
+            }
+            /**
+             * Description: This method will call helpMenuMenuSelected when
+             * clicked and will bring up the HelpGUI information.
+             * @param evt Menu Listener
+             */
+            @Override
+            public void menuSelected(javax.swing.event.MenuEvent e) {
+                helpMenuMenuSelected(e);
+            }
+        });
     }
+    
+    
+    
     /**
      * Description: This will load the binary database file if it is present
      * if not present it will display an error to the user.
@@ -172,6 +208,10 @@ public class ViewerGUI extends JFrame
         binaryFile = new File(FILE_NAME);
         chooseFile.setCurrentDirectory
             (binaryFile.getAbsoluteFile().getParentFile());
+        FileFilter filter;
+        filter = new ExtensionFileFilter(".dat- Binary File "
+                , new String[] {"dat"});
+        chooseFile.setFileFilter(filter);
         if(binaryFile.canRead() && binaryFile.exists())
         {
             
@@ -191,6 +231,7 @@ public class ViewerGUI extends JFrame
             }
         }
     }
+    
     ActionListener listener = new ActionListener() 
     {
     /**
@@ -220,11 +261,36 @@ public class ViewerGUI extends JFrame
         }
     }
     };
+    /**
+     * Description: This method will create an variable of the AboutInformation
+     * type and make the GUI visible, centered, and always in front of the 
+     * program.
+     * @param evt Menu Event
+     */
+    private void aboutMenuMenuSelected(javax.swing.event.MenuEvent evt) {                                    
+        AboutInformation about = new AboutInformation ();
+        about.setVisible(true);
+        about.setAlwaysOnTop(true);
+        about.setLocationRelativeTo(null);
+    }
+     /**
+     * Description: This method will create an variable of the HelpGUI
+     * type and make the GUI visible, centered, and always in front of the 
+     * program.
+     * @param evt Menu Event
+     */
+    private void helpMenuMenuSelected(javax.swing.event.MenuEvent e) {                                    
+        HelpGUI help = new HelpGUI ();
+        help.setVisible(true);
+        help.setAlwaysOnTop(true);
+        help.setLocationRelativeTo(null);
+    }
+   
     JPanel west;
     JPanel east;
     JMenuBar menuSelector;
-    JMenuItem helpItem;
-    JMenuItem aboutItem;
+    JMenu helpMenu;
+    JMenu aboutMenu;
     JMenuItem quitItem;
     JMenuItem openItem;
     File binaryFile;
