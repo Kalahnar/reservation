@@ -32,12 +32,20 @@ import javax.swing.JTextArea;
  */
 public class AboutInformation extends javax.swing.JFrame {
     public static final int HEIGHT = 225;
-    public static final int WIDTH =  600;  
+    public static final int WIDTH =  555;  
     public static final int FONT_SIZE = 20;
     public static final int COMPONENT_HEIGHTWIDTH = 300;
     public static final int IMAGE_SIZE = 15;
-    public static final String description = "Information like authors, date created"
-            + "hours took to make, version etc... ";
+    public static final String description = "*Description:  This program  searches through the binary file \n" +
+"                          and looks for the name under which the reservations was made\n" +
+"                          and displays the customers reservation information in  aplhabetical order. \n" +
+"*Authors: Luka Gajic, Jason Bowen, Branavan Nagendiram \n" +
+"*Platform: PC, Windows 8, 1.8.0_65, NetBeans 8.1\n" +
+"*Hours: 17 hours and 37 minutes\n" +
+"*Created on: June 1, 2016, 2:04 PM \n" +
+"*Revised on: June 13, 2016\";"
+            ;
+            
     /**
      * Description: Default constructor that assigns the default close
      * to dispose the window, centers the form and makes it visible.
@@ -49,6 +57,7 @@ public class AboutInformation extends javax.swing.JFrame {
         aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //        aboutFrame.setLocationRelativeTo(null);
         aboutFrame.setVisible(true);
+        
     }
      /**
      * Description: This method sets the layout to BorderLayout and runs
@@ -106,7 +115,7 @@ public class AboutInformation extends javax.swing.JFrame {
         //Once we figure out the text make sure GUI is resizible(false);
         textPanel = new JPanel();
         setLayout(new FlowLayout());
-        textArea = new JTextArea(15,40);
+        textArea = new JTextArea(5,45);
         add(textArea);
         textArea.setEditable(false);
         textArea.setText(description);
@@ -123,30 +132,23 @@ public class AboutInformation extends javax.swing.JFrame {
         setLayout (new FlowLayout());
         closeButton = new JButton("Close");
         add(closeButton);
+        closeButton.addActionListener(new java.awt.event.ActionListener() 
+        {
+            /**
+             * Description: calls another method closeItemActionPerformed
+             * that will close the form and dispose of it when clicked.
+             * @param evt - Action Event
+             */
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeItemActionPerformed(evt);
+            }
+        });
+        
               
     }
     
     
-//     ActionListener listener = new ActionListener() 
-//    {
-//    /**
-//     * Description: Overrides an actionPerformed method in order to create
-//     * an event when the file items are clicked it will performed said action.
-//     * @param event - check to see if action occurred
-//     * 
-//     */
-//    @Override
-//    public void actionPerformed(ActionEvent event)
-//    {
-//        if(event.getSource() == closeItem)
-//        {
-//
-//            this.actionPerformed(eve);
-//            System.out.println("Error");
-//        }
-//       
-//    }
-//    };
+
     /**
      * Description: This method is an ActionListener that will dispose of
      * the form when the exit item is clicked.

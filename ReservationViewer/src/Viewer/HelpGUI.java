@@ -79,6 +79,7 @@ public class HelpGUI extends JFrame {
         });
         
     }
+   
     
     /**
      * Description: Sets the JTextArea of the program and assigns the text

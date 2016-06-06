@@ -269,6 +269,7 @@ public class ViewerGUI extends JFrame
      */
     private void aboutMenuMenuSelected(javax.swing.event.MenuEvent evt) {                                    
         AboutInformation about = new AboutInformation ();
+        about.setResizable(false);
         about.setVisible(true);
         about.setAlwaysOnTop(true);
         about.setLocationRelativeTo(null);
