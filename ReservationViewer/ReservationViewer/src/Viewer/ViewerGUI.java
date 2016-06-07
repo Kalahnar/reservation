@@ -35,7 +35,7 @@ import javax.swing.filechooser.FileFilter;
  * display their reservation.
  * Date: 6/1/2016
  * Platform: Windows 8, jdk 1.8.0_66, NetBeans 8.1
- * @author 
+ * @author Branavan Nagendiram , Luka Gajic , Jason Bowen
  */
 public class ViewerGUI extends JFrame
 {
@@ -66,8 +66,9 @@ public class ViewerGUI extends JFrame
         setTitle("Reservation Viewer");
         tabPane = new JTabbedPane();
         setFileMenu();
-        loadBinary();
+        
         setGUI();
+//        loadBinary();
     }
     /**
      * Description: Creates tabs pane for the user to search for the customer
@@ -198,7 +199,7 @@ public class ViewerGUI extends JFrame
         chooseFile.setFileFilter(filter);
         if(binaryFile.canRead() && binaryFile.exists())
         {
-            
+          ReservationDatabase reservation = new ReservationDatabase(binaryFile);
         }
         else
         {
@@ -303,4 +304,5 @@ public class ViewerGUI extends JFrame
     AboutInformation about;
     HelpGUI help;
     boolean isBoxOpen;
+    ReservationDatabase reservation;
 }

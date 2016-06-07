@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
  * the user on how to use the program.
  * Date: 6/5/2016
  * Platform: Windows 8, jdk 1.8.0_66, NetBeans 8.1
- * @author 
+ * @author Branavan Nagendiram , Luka Gajic , Jason Bowen
  */
 public class HelpGUI extends JFrame {
     public static final int HEIGHT = 190;
