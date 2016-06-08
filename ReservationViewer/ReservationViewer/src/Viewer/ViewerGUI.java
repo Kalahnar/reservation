@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -45,6 +46,7 @@ public class ViewerGUI extends JFrame
     public static final int FONT_SIZE = 20;
     public static final int COMPONENT_HEIGHTWIDTH = 300;
     public static final int IMAGE_SIZE = 15;
+    public static final int FIRST_INDEX_ARRAY = 0;
     /**
      * Description: main constructor - set forms to visible, centers it and
      * makes the default close button exit the program.
@@ -65,10 +67,10 @@ public class ViewerGUI extends JFrame
         ("hotel.png")));
         setTitle("Reservation Viewer");
         tabPane = new JTabbedPane();
-        setFileMenu();
         
+        setFileMenu();
         setGUI();
-//        loadBinary();
+        loadBinary();
     }
     /**
      * Description: Creates tabs pane for the user to search for the customer
@@ -95,6 +97,7 @@ public class ViewerGUI extends JFrame
                         , java.awt.Image.SCALE_SMOOTH);
         icon = new ImageIcon(newImage);
         wholeButton = new JRadioButton("Search by: Full Name In Whole");
+        wholeButton.setSelected(true);
         startButton = new JRadioButton
         ("Search by: Letter the Name Starts With");
         radioGroup.add(wholeButton);
@@ -121,6 +124,7 @@ public class ViewerGUI extends JFrame
         tabPane.addTab("Search for Customer", icon, buttonPanel);
         customersInfo = new JPanel();
         tabPane.addTab("Customer(s) Reservation(s)", icon, customersInfo);
+        searchButton.addActionListener(listener);
         add(tabPane);
     }
     /**
@@ -199,7 +203,9 @@ public class ViewerGUI extends JFrame
         chooseFile.setFileFilter(filter);
         if(binaryFile.canRead() && binaryFile.exists())
         {
-          ReservationDatabase reservation = new ReservationDatabase(binaryFile);
+            reservation = new ReservationDatabase(binaryFile);
+            reservation.readFile();
+            dataArray = reservation.getDatabaseArray();
         }
         else
         {
@@ -211,7 +217,9 @@ public class ViewerGUI extends JFrame
                 binaryFile = chooseFile.getSelectedFile();
                 if(binaryFile.canRead() && binaryFile.exists())
                 {
-                    System.out.println("File is read");
+                    reservation = new ReservationDatabase(binaryFile);
+                    reservation.readFile();
+                    dataArray = reservation.getDatabaseArray();
                 }
             }
         }
@@ -240,9 +248,26 @@ public class ViewerGUI extends JFrame
                 binaryFile = chooseFile.getSelectedFile();
                 if(binaryFile.canRead() && binaryFile.exists())
                 {
-                    System.out.println("File is read");
+                    reservation = new ReservationDatabase(binaryFile);
+                    reservation.readFile();
+                    dataArray = reservation.getDatabaseArray();
+                    System.out.println(Arrays.toString(dataArray));
                 }
             }
+        }
+        if(event.getSource() == searchButton)
+        {
+           try
+           {
+           customerName = custName.getText();
+           System.out.println(Search.BinarySearch(dataArray , customerName
+                   , FIRST_INDEX_ARRAY, dataArray.length));
+           }
+           catch(NullPointerException exp)
+           {
+               JOptionPane.showMessageDialog(null, "Name not found", 
+                       "Name not found Error", JOptionPane.ERROR_MESSAGE);
+           }
         }
     }
     };
@@ -272,6 +297,10 @@ public class ViewerGUI extends JFrame
         help.setVisible(true);
         help.setAlwaysOnTop(true);
         help.setLocationRelativeTo(null);
+    }
+    public String getCustomerName()
+    {
+        return customerName;
     }
    
     JPanel west;
@@ -305,4 +334,7 @@ public class ViewerGUI extends JFrame
     HelpGUI help;
     boolean isBoxOpen;
     ReservationDatabase reservation;
+    Reservation[] dataArray;
+    String customerName;
+    
 }
