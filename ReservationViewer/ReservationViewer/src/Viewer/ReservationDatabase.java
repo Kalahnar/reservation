@@ -24,9 +24,8 @@ public class ReservationDatabase
      */
     public ReservationDatabase(File file)
     {
-        super();
-        gui = new ViewerGUI();
         getFile(file);
+        dates = new ArrayList();
     }
     /**
      * Description: this methods assigns the file variable to file.
@@ -45,7 +44,7 @@ public class ReservationDatabase
     {
         if(databaseFile.exists() && databaseFile.canRead() )
         {
-             try
+           try
            {
            buffered = new BufferedReader(new FileReader
                                         (databaseFile));
